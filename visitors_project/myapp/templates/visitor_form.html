@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ввод посетителей</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #3498db;
+      color: #fff;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 1.5em;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .form-container {
+      width: 30%;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 15px 30px 15px 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h3 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .form-container form > *:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    input[type="text"], input[type="date"], textarea, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      width: auto;
+      min-width: 150px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .form-container button {
+      display: block;
+      margin: 0 auto;
+    }
+
+    table {
+      width: 100%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      font-size: 0.9em;
+    }
+
+    th {
+      background-color: #2980b9;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f4f8;
+    }
+
+    tr:hover {
+      background-color: #ecf0f1;
+    }
+
+    @media (max-width: 768px) {
+      .form-container {
+        width: 90%;
+      }
+
+      th, td {
+        font-size: 0.8em;
+        padding: 10px;
+      }
+    }
+
+    .fio-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      width: 105%;
+    }
+
+    .add-fio-btn {
+      background-color: #27ae60;
+      min-width: 40px;
+      color: white;
+      border: none;
+      font-size: 18px;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .add-fio-btn:hover {
+      background-color: #219150;
+    }
+
+    /* Новый стиль для кнопки удаления */
+    .remove-fio-btn {
+      background-color: #e74c3c;
+      min-width: 40px;
+      color: white;
+      border: none;
+      font-size: 15px;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-left: 5px;
+    }
+
+    .remove-fio-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="date"],
+    .form-container textarea,
+    .form-container select {
+        width: 105%;
+        box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Ввод посетителей
+  </header>
+
+  <main>
+    <div class="form-container">
+      <h3>Добавить посетителя</h3>
+      <form method="post" id="visitorForm">
+        {% csrf_token %}
+        
+        <div id="fio-container">
+          <div class="fio-group">
+            <input type="text" name="full_name[]" placeholder="Введите ФИО" required>
+            <button type="button" class="add-fio-btn" onclick="addFioField()">+</button>
+          </div>
+        </div>
+        
+        <input type="text" name="organization" placeholder="Организация" required>
+        <input type="text" name="recipient_full_name" placeholder="К кому ФИО">
+        <select name="recipient_department" required>
+          <option value="" disabled selected>Выберите отдел</option>
+          {% for department in departments %}
+            <option value="{{ department }}">{{ department }}</option>
+          {% endfor %}
+        </select>
+        
+        <button type="submit">Добавить</button>
+      </form>
+    </div>
+
+    <form method="post" action="{% url 'send_report' %}" style="text-align: center; margin-bottom: 20px;">
+      {% csrf_token %}
+      <button type="submit" style="width: auto; padding: 10px 20px;">Отправить отчет на почту</button>
+    </form>
+
+    <h3 style="text-align: center;">Список посетителей</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>ФИО</th>
+          <th>Организация</th>
+          <th>К кому ФИО</th>
+          <th>Отдел</th>
+          <th>Дата</th>
+          <th>Время</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for visitor in visitors %}
+        <tr>
+          <td>{{ visitor.full_name }}</td>
+          <td>{{ visitor.organization }}</td>
+          <td>{{ visitor.recipient_full_name }}</td>
+          <td>{{ visitor.recipient_department }}</td>
+          <td>{{ visitor.visit_date }}</td>
+          <td>{{ visitor.visit_time }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" style="text-align: center;">Нет записей</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    function addFioField() {
+      let container = document.getElementById('fio-container');
+      let newField = document.createElement('div');
+      newField.classList.add('fio-group');
+      newField.innerHTML = `
+        <input type="text" name="full_name[]" placeholder="Введите ФИО" required>
+        <button type="button" class="remove-fio-btn" onclick="removeFioField(this)">-</button>
+      `;
+      container.appendChild(newField);
+    }
+
+    function removeFioField(button) {
+      button.parentElement.remove();
+    }
+  </script>
+
+</body>
+</html>
