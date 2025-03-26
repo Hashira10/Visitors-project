@@ -37,11 +37,12 @@ pip install -r requirements.txt
 
 ### 4 **Настройте переменные окружения**
 
-Создайте файл .env в корневой папке проекта и добавьте в него:
+Создайте файл .env в корневой папке проекта:
 ```bash
-EMAIL_HOST_USER=your_email@example.com
-EMAIL_HOST_PASSWORD=your_password
+echo EMAIL_HOST_USER=your_email@example.com > .env
+echo EMAIL_HOST_PASSWORD=your_password >> .env
 ```
+
 
 ### 5 **Примените миграции**
 ```bash
