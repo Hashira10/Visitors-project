@@ -37,7 +37,7 @@ pip install -r requirements.txt
 
 ### 4 **Настройте переменные окружения**
 
-Создайте файл .env в корневой папке проекта:
+Создайте файл .env в корневой папке проекта Для Windows (cmd / PowerShell):
 ```bash
 echo EMAIL_HOST_USER=your_email@example.com > .env
 echo EMAIL_HOST_PASSWORD=your_password >> .env
