@@ -14,7 +14,7 @@
 ### 1 **Склонируйте репозиторий**
 ```bash
 git clone https://github.com/Hashira10/Visitors-project
-cd Visitors-project
+cd Visitors-project/visitors_project
 ```
 
 ### 2 **Создайте и активируйте виртуальное окружение**
