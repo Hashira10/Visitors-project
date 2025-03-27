@@ -16,7 +16,11 @@
 git clone https://github.com/Hashira10/Visitors-project
 cd Visitors-project/visitors_project
 ```
-
+или скачайте  Code → Download ZIP
+Распакуйте архив и перейдите в папку:
+```bash
+cd Visitors-project/visitors_project
+```
 ### 2 **Создайте и активируйте виртуальное окружение**
 ```bash
 python -m venv venv  
