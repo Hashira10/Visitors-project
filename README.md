@@ -19,7 +19,7 @@ cd Visitors-project/visitors_project
 или скачайте  Code → Download ZIP
 Распакуйте архив и перейдите в папку:
 ```bash
-cd Visitors-project/visitors_project
+cd Visitors-project-main/visitors_project
 ```
 ### 2 **Создайте и активируйте виртуальное окружение**
 ```bash
